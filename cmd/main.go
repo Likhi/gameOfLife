@@ -12,12 +12,13 @@ func main() {
 	//g.Print()
 	history := []gol.Grid{g}
 
-	const _iterations = 1
+	const _iterations = 5
 
 	for i := 0; i < _iterations; i++ {
 		fmt.Println(i)
-		history = append(history, g.Run()) // runs iteration and saves it to the history
-		//history[0].Print()
+		next := g.Run()
+		history = append(history, next) // runs iteration and saves it to the history
+		next.Print()
 	}
 
 }
