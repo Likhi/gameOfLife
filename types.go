@@ -7,6 +7,7 @@ import (
 )
 
 // put types in here
+
 type Grid [][]cell
 
 type cell struct {
@@ -20,6 +21,16 @@ const (
 	_alive
 )
 
+type Osc int
+
+const (
+	BlinkPeriodTwo Osc = iota + 1
+	BeaconPeriodTwo
+	ToadPeriodTwo
+	PulsarPeriod3
+	PentaDecathalonPeriod15
+)
+
 const (
 	_probabilityAlive = 10
 )
@@ -30,7 +41,7 @@ func NewGrid(rows int, cols int) Grid {
 	for i := 0; i < rows; i++ {
 		var row []cell
 		for j := 0; j < cols; j++ {
-			row = append(row, NewCell())
+			row = append(row, newCell())
 		}
 		ret = append(ret, row)
 	}
@@ -41,37 +52,45 @@ func NewGrid(rows int, cols int) Grid {
 // NewOscillator creates a grid seeded with an oscillator
 // 5x5 grid with "blinker".
 // todo instead of a string, use an enum (const) that determine oscillator type
-func NewOscillator(o string) Grid {
-	row1 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
-	row2 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
-	row3 := []cell{DeadCell(), AliveCell(), AliveCell(), AliveCell(), DeadCell()}
-	row4 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
-	row5 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
+func NewOscillator(o Osc) Grid {
+	switch o {
+	case BlinkPeriodTwo:
+		row1 := []cell{deadCell(), deadCell(), deadCell(), deadCell(), deadCell()}
+		row2 := []cell{deadCell(), deadCell(), deadCell(), deadCell(), deadCell()}
+		row3 := []cell{deadCell(), aliveCell(), aliveCell(), aliveCell(), deadCell()}
+		row4 := []cell{deadCell(), deadCell(), deadCell(), deadCell(), deadCell()}
+		row5 := []cell{deadCell(), deadCell(), deadCell(), deadCell(), deadCell()}
 
-	ret := Grid{row1, row2, row3, row4, row5}
+		blinkPeriodTwo := Grid{row1, row2, row3, row4, row5}
+		return blinkPeriodTwo
+	case BeaconPeriodTwo:
+		row1 := []cell{deadCell(), deadCell(), deadCell(), deadCell(), deadCell(), deadCell()}
+		row2 := []cell{deadCell(), deadCell(), deadCell(), deadCell(), deadCell(), deadCell()}
+		row3 := []cell{deadCell(), deadCell(), aliveCell(), aliveCell(), aliveCell(), deadCell()}
+		row4 := []cell{deadCell(), aliveCell(), aliveCell(), aliveCell(), deadCell(), deadCell()}
+		row5 := []cell{deadCell(), deadCell(), deadCell(), deadCell(), deadCell(), deadCell()}
+		row6 := []cell{deadCell(), deadCell(), deadCell(), deadCell(), deadCell(), deadCell()}
 
-	return ret
+		beaconPeriodTwo := Grid{row1, row2, row3, row4, row5, row6}
+		return beaconPeriodTwo
+	default:
+		panic("Unsupported oscillator!")
+	}
+
 }
 
-// DeadGrid returns a Grid of only DeadCells
-// todo create Grid from width and height arguments
-func (x *Grid) DeadGrid() Grid {
+// deadGrid returns a new Grid with the same size of x but with only _dead cell{}s
+func (x *Grid) deadGrid() Grid {
 	width := len((*x)[0])
 	height := len(*x)
-	//row1 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
-	//row2 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
-	//row3 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
-	//row4 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
-	//row5 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
-	//
-	//ret := Grid{row1, row2, row3, row4, row5}
+
 	ret := NewGrid(height, width)
 
 	return ret
 }
 
-// NewCell returns a cell randomly selected to be alive or dead
-func NewCell() cell {
+// newCell returns a cell randomly selected to be alive or dead
+func newCell() cell {
 	value := rand.Intn(100)
 	//fmt.Println(value)
 	if value < _probabilityAlive {
@@ -80,14 +99,17 @@ func NewCell() cell {
 	return cell{s: _dead}
 }
 
-func DeadCell() cell {
+// deadCell returns a cell{} with the state _dead
+func deadCell() cell {
 	return cell{s: _dead}
 }
 
-func AliveCell() cell {
+// aliveCell returns a cell{} with the state _alive
+func aliveCell() cell {
 	return cell{s: _alive}
 }
 
+// Print "pretty prints" a Grid
 func (x *Grid) Print() {
 	for _, row := range *x {
 		for _, col := range row {
@@ -103,19 +125,15 @@ func (x *Grid) Print() {
 	}
 }
 
-// Run calculates the next iteration on the Grid and returns a copy of it
+// Run calculates the next iteration on the Grid and returns a deep copy of it
 func (x *Grid) Run() Grid {
-	//runs one iteration of the simulation on the grid
-	//returns a copy grid after simulation
-
 	// create grid "next" for holding next cells
-	next := x.DeadGrid()
+	next := x.deadGrid()
 
 	//todo run simulation on *Grid, copy it and return it
 	for m, row := range *x {
 		for n, c := range row {
 			//iterate through each cell c in the original grid and calculate next cell
-			//fmt.Println("Run", "[m,n]", "[", m, ",", n, "]")
 			upLeft := x.getState(m-1, n-1)
 			up := x.getState(m-1, n)
 			upRight := x.getState(m-1, n+1)
@@ -136,8 +154,6 @@ func (x *Grid) Run() Grid {
 					liveCount += 1
 				}
 			}
-
-			//fmt.Println("m", m, "n", n, "live count", liveCount)
 
 			nextCell := cell{}
 			//Any live cell with two or three live neighbours survives.
@@ -168,10 +184,6 @@ func (x *Grid) Run() Grid {
 
 		}
 
-		//fmt.Println("next")
-		//next.Print()
-		//fmt.Println("grid")
-		//x.Print()
 	}
 
 	return next

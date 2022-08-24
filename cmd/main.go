@@ -10,8 +10,8 @@ import (
 //todo update same space on terminal screen (i.e no new line)
 
 func main() {
-	g := gol.NewGrid(61, 100)
-	//g := gol.NewOscillator("o")
+	//g := gol.NewGrid(61, 100)
+	g := gol.NewOscillator(gol.BeaconPeriodTwo)
 	history := []gol.Grid{}
 	fmt.Println("start")
 	g.Print()
@@ -24,7 +24,6 @@ func main() {
 		fmt.Println("Iteration:", i)
 		g = g.Run()
 		g.Print()
-		time.Sleep(750 * time.Millisecond)
+		time.Sleep(500 * time.Millisecond)
 	}
-
 }
