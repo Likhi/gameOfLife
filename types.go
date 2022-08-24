@@ -39,8 +39,8 @@ func NewGrid(rows int, cols int) Grid {
 }
 
 // NewOscillator creates a grid seeded with an oscillator
-// 5x5 "blinker".
-// todo instead of a string, use an enum (const)
+// 5x5 grid with "blinker".
+// todo instead of a string, use an enum (const) that determine oscillator type
 func NewOscillator(o string) Grid {
 	row1 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
 	row2 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}

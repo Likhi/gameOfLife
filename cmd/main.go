@@ -10,21 +10,21 @@ import (
 //todo update same space on terminal screen (i.e no new line)
 
 func main() {
-	g := gol.NewGrid(10, 10)
+	g := gol.NewGrid(61, 100)
 	//g := gol.NewOscillator("o")
 	history := []gol.Grid{}
 	fmt.Println("start")
 	g.Print()
 
-	const _iterations = 5
+	const _iterations = 50
 
 	for i := 0; i < _iterations; i++ {
 		// save last grid state
 		history = append(history, g)
-		fmt.Println(i)
+		fmt.Println("Iteration:", i)
 		g = g.Run()
 		g.Print()
-		time.Sleep(1 * time.Second)
+		time.Sleep(750 * time.Millisecond)
 	}
 
 }
