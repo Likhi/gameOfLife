@@ -21,7 +21,7 @@ const (
 )
 
 const (
-	_probabilityAlive = 20
+	_probabilityAlive = 10
 )
 
 func NewGrid(rows int, cols int) Grid {
@@ -55,14 +55,17 @@ func NewOscillator(o string) Grid {
 
 // DeadGrid returns a Grid of only DeadCells
 // todo create Grid from width and height arguments
-func DeadGrid(o string) Grid {
-	row1 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
-	row2 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
-	row3 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
-	row4 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
-	row5 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
-
-	ret := Grid{row1, row2, row3, row4, row5}
+func (x *Grid) DeadGrid() Grid {
+	width := len((*x)[0])
+	height := len(*x)
+	//row1 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
+	//row2 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
+	//row3 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
+	//row4 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
+	//row5 := []cell{DeadCell(), DeadCell(), DeadCell(), DeadCell(), DeadCell()}
+	//
+	//ret := Grid{row1, row2, row3, row4, row5}
+	ret := NewGrid(height, width)
 
 	return ret
 }
@@ -106,7 +109,7 @@ func (x *Grid) Run() Grid {
 	//returns a copy grid after simulation
 
 	// create grid "next" for holding next cells
-	next := DeadGrid("o")
+	next := x.DeadGrid()
 
 	//todo run simulation on *Grid, copy it and return it
 	for m, row := range *x {

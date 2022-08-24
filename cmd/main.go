@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	//g := gol.NewGrid(5, 5)
-	g := gol.NewOscillator("o")
+	g := gol.NewGrid(10, 10)
+	//g := gol.NewOscillator("o")
 	history := []gol.Grid{}
 	fmt.Println("start")
 	g.Print()
