@@ -112,10 +112,10 @@ func (x *Grid) Run() Grid {
 	for m, row := range *x {
 		for n, c := range row {
 			//iterate through each cell c in the original grid and calculate next cell
-			fmt.Println("Run", "[m,n]", "[", m, ",", n, "]")
+			//fmt.Println("Run", "[m,n]", "[", m, ",", n, "]")
 			upLeft := x.getState(m-1, n-1)
 			up := x.getState(m-1, n)
-			upRight := x.getState(m+1, n+1)
+			upRight := x.getState(m-1, n+1)
 			left := x.getState(m, n-1)
 			right := x.getState(m, n+1)
 			downLeft := x.getState(m+1, n-1)
@@ -134,7 +134,7 @@ func (x *Grid) Run() Grid {
 				}
 			}
 
-			fmt.Println("m", m, "n", n, "live count", liveCount)
+			//fmt.Println("m", m, "n", n, "live count", liveCount)
 
 			nextCell := cell{}
 			//Any live cell with two or three live neighbours survives.
@@ -165,10 +165,10 @@ func (x *Grid) Run() Grid {
 
 		}
 
-		fmt.Println("next")
-		next.Print()
-		fmt.Println("grid")
-		x.Print()
+		//fmt.Println("next")
+		//next.Print()
+		//fmt.Println("grid")
+		//x.Print()
 	}
 
 	return next
@@ -194,8 +194,8 @@ func (x *Grid) getState(m int, n int) state {
 		nWrapped = n % width
 	}
 
-	fmt.Println("mUW", m, "nUW", n)
-	fmt.Println("mW", mWrapped, "nW", nWrapped)
+	//fmt.Println("mUW", m, "nUW", n)
+	//fmt.Println("mW", mWrapped, "nW", nWrapped, "state", (*x)[mWrapped][nWrapped].s)
 
 	return (*x)[mWrapped][nWrapped].s
 }
