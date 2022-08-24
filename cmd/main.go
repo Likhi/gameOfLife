@@ -6,6 +6,9 @@ import (
 	"time"
 )
 
+//todo more oscillator test cases
+//todo update same space on terminal screen (i.e no new line)
+
 func main() {
 	g := gol.NewGrid(10, 10)
 	//g := gol.NewOscillator("o")
