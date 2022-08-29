@@ -19,7 +19,6 @@ func main() {
 	g := gol.NewOscillator(gol.BeaconPeriodTwo)
 	fmt.Println("start")
 	g.Print()
-
 	for i := 0; i < _iterations; i++ {
 		fmt.Println("Iteration:", i) // Show which iteration we're on
 		g = g.Run()                  // Run the simulation once
